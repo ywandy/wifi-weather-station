@@ -30,10 +30,8 @@ void setup() {
 	MY_WIFI.WIFI_Init();
 	MY_WIFI.WIFI_Server_Init();
 	OTA_Init(); //提供升级接口
-	WIFI_TCP_Init();
 	init_udp_time();
 	scheduler_init();
-
 }
 
 // the loop function runs over and over again until power down or reset

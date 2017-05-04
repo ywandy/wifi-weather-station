@@ -67,10 +67,7 @@ int get_switch(char *url){
     int sum = 0;
     int loop = 0;
     String inString = "";
-	/*
-	if (comdata[0] == 'f'){
-			post_end(1); }*/
-    while(comdata[loop]!='i'){
+    while(comdata[loop]!='c'){
       if(loop == 6){
           break;
         }
@@ -79,9 +76,9 @@ int get_switch(char *url){
         }
         loop++;
       }
-      mydt.cur = inString.toFloat();
+      mydt.temp = inString.toFloat();
       inString = "";
-      while(comdata[loop]!='v'){
+      while(comdata[loop]!='h'){
       if(loop == 13){
           break;
         }
@@ -90,9 +87,9 @@ int get_switch(char *url){
         }
         loop++;
       }
-      mydt.vol = inString.toFloat();
+      mydt.hum = inString.toFloat();
       inString = "";
-      while(comdata[loop]!='m'){
+      while(comdata[loop]!='b'){
       if(loop == 19){
           break;
         }
@@ -101,27 +98,27 @@ int get_switch(char *url){
         }
         loop++;
       }
-      mydt.mh = inString.toFloat();
+      mydt.bar = inString.toFloat();
       inString = "";
-      while(comdata[loop]!='p'){
-      if(loop == 25){
-          break;
-        }
-       if(isDigit(comdata[loop])||comdata[loop]=='.'|| comdata[loop] == '-'){
-          inString += comdata[loop];
-        }
-        loop++;
-      }
-      mydt.power = inString.toFloat();
-      inString = "";
-      Serial.print("vol:");
-      Serial.print(mydt.vol);
-      Serial.print("cur:");
-      Serial.print(mydt.cur);
-      Serial.print("mh:");
-      Serial.print(mydt.mh);
-	  Serial.print("power:");
-	  Serial.print(mydt.power);
+	  while (comdata[loop] != 'b') {
+		  if (loop == 25) {
+			  break;
+		  }
+		  if (isDigit(comdata[loop]) || comdata[loop] == '.' || comdata[loop] == '-') {
+			  inString += comdata[loop];
+		  }
+		  loop++;
+	  }
+	  mydt.light = inString.toFloat();
+	  inString = "";
+      Serial.print("temp:");
+      Serial.print(mydt.temp);
+      Serial.print("hum:");
+      Serial.print(mydt.hum);
+      Serial.print("bar:");
+      Serial.print(mydt.bar);
+	  Serial.print("light:");
+	  Serial.print(mydt.light);
 	  Serial.print("\n");
   }
 

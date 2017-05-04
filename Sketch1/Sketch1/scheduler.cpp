@@ -9,12 +9,16 @@
 #include "data_transfer.h"
 #include "net_time.h"
 #define TEMP_SENSOR "http://api.yeelink.net/v1.0/device/357151/sensor/405136/datapoints"
+#define HUM_SENSOR "http://api.yeelink.net/v1.0/device/357151/sensor/405137/datapoints"
+#define BAR_SENSOR "http://api.yeelink.net/v1.0/device/357151/sensor/405139/datapoints"
+
 extern WIFI_CONFIG MY_WIFI;
 extern ESP8266WebServer server;
 extern WiFiClient client;
 extern char time_iso[16]; //时间戳全局
 unsigned long int cnt_1ms, cnt_2ms, cnt_5ms, cnt_50ms, cnt_500ms, cnt_10ms,cnt_10s;
 extern int led_state;
+String comdata = ""; //接受串口数据
 void scheduler_init()
 {
 	cnt_1ms = cnt_2ms = cnt_5ms = cnt_50ms = cnt_500ms = cnt_10ms = cnt_10s = 0;;
@@ -25,6 +29,8 @@ static void WIFI_Loop_10s(void) {
 	Serial.println("Time got!");
 	Serial.println(time_iso);
 	esp_send(43.62, TEMP_SENSOR, time_iso);
+	esp_send(0.4, HUM_SENSOR, time_iso);
+	esp_send(103000, BAR_SENSOR, time_iso);
 }
 
 static void WIFI_Loop_500ms(void)	//500ms执行一次
@@ -34,7 +40,7 @@ static void WIFI_Loop_500ms(void)	//500ms执行一次
 		led_state = 1;
 	else
 		led_state = 0;
-	client.write("hello world");
+	//client.write("hello world");
 }
 
 static void WIFI_Loop_50ms(void)	//50ms执行一次
@@ -58,7 +64,16 @@ static void WIFI_Loop_5ms(void)	//5ms执行一次
 
 void WiFi_Loop(void)
 {
-
+	while (Serial.available() > 0)
+	{
+		comdata += char(Serial.read());
+		delay(5);
+	}
+	if (comdata.length() > 0)
+	{
+		apart_num();
+		comdata = "";
+	}
 	if (millis() >= cnt_500ms)
 	{
 		cnt_500ms = millis() + 500;

@@ -9,11 +9,10 @@
 #include "net_time.h"
 #include "ArduinoJson.h"
 typedef struct DT{
-    float vol;
-    float cur;
-    float mh;
-    float tmp;
-	float power;
+    float temp;
+    float hum;
+    float bar;
+	float light;
   }DT;
 
 void esp_send(float dat,char *s,char *tm);
